@@ -14,4 +14,11 @@ contract DappToken {
         totalSupply = _initialSupply; // 100 tokens
         balanceOf[msg.sender] = _initialSupply; // allocate initial Supply to contract creator -> accounts[0]
     }
+
+    function transfer(address _to, uint256 _value) public returns (bool) {
+        require(balanceOf[msg.sender] >= _value);
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        return true;
+    }
 }
