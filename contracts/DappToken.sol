@@ -10,6 +10,8 @@ contract DappToken {
 
     mapping(address => uint256) public balanceOf;
 
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+
     constructor(uint256 _initialSupply) public {
         totalSupply = _initialSupply; // 100 tokens
         balanceOf[msg.sender] = _initialSupply; // allocate initial Supply to contract creator -> accounts[0]
@@ -19,6 +21,7 @@ contract DappToken {
         require(balanceOf[msg.sender] >= _value);
         balanceOf[msg.sender] -= _value;
         balanceOf[_to] += _value;
+        emit Transfer(msg.sender, _to, _value);
         return true;
     }
 }
