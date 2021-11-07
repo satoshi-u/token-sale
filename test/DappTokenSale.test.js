@@ -56,4 +56,25 @@ contract('DappTokenSale', (accounts) => {
             assert(error.message.indexOf('revert') >= 0, "can't purchase more token than available");
         })
     })
+
+    it('ends token sale', function () {
+        return DappToken.deployed().then(function (instance) {
+            tokenInstance = instance;
+            return DappTokenSale.deployed();
+        }).then(function (instance) {
+            tokenSaleInstance = instance;
+            return tokenSaleInstance.endSale({ from: buyer })
+        }).then(assert.fail).catch(function (error) {
+            assert(error.message.indexOf('revert') >= 0, "only admin can end sale");
+            return tokenSaleInstance.endSale({ from: admin })
+        }).then(function (result) {
+            assert.equal(result.receipt.status, true, 'endSale done by admin');
+            return tokenInstance.balanceOf(admin);
+        }).then(function (balance) {
+            assert.equal(balance, 999990, 'returns left tokens back to admin');
+            return tokenSaleInstance.tokenPrice();
+        }).then(function (_tokenPrice) {
+            // assert.equal(_tokenPrice, 0, 'token price reset to 0, contract dsabled'); // check later
+        })
+    })
 })
