@@ -8,7 +8,7 @@ function tokensFromWei(n) {
 }
 
 contract('DappToken', (accounts) => {
-
+    let tokenInstance;
     it('initializes ERC20 optional details', function () {
         return DappToken.deployed().then(function (instance) {
             tokenInstance = instance;
